@@ -38,12 +38,12 @@ public class AppConfig {
   // Hook at thread swap for webclient
   ExchangeFilterFunction function =
       (request, next) -> {
-        // here runs on main(request's) thread
+        // Main request thread
         Map<String, String> map = MDC.getCopyOfContextMap();
         return next.exchange(request)
             .doOnNext(
                 value -> {
-                  // here runs on reactor's thread
+                  // Get invoked as soon as reactor thread will change
                   if (map != null) {
                     MDC.setContextMap(map);
                   }
